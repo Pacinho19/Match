@@ -1,6 +1,7 @@
 package pl.pacinho.match.cube.model;
 
 import lombok.Getter;
+import pl.pacinho.match.utils.RandomUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -45,5 +46,9 @@ public enum CubeSideType {
                 .filter(cubeSideType -> cubeSideType.order == _order)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("CubeSideType not found by given order: " + _order));
+    }
+
+    public static CubeSideType getRandom() {
+        return values()[RandomUtils.getRandom(0, values().length)];
     }
 }

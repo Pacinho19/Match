@@ -4,8 +4,9 @@ import pl.pacinho.match.cube.model.Cube;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-interface CubeReader {
+public interface CubeReader {
 
     List<String[]> getRawLines() throws IOException;
 
@@ -13,6 +14,6 @@ interface CubeReader {
         return getRawLines()
                 .stream()
                 .map(CubeParser::parseCube)
-                .toList();
+                .collect(Collectors.toList());
     }
 }
