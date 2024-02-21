@@ -3,8 +3,6 @@ package pl.pacinho.match.board.tools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.pacinho.match.board.model.BoardCube;
 import pl.pacinho.match.config.GameConfiguration;
@@ -16,8 +14,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -53,7 +52,7 @@ class BoardBuilderTest {
     }
 
     @Test
-    void boarCubesArrayShouldBeCreatedWhenIsEnoughDifferentCubes() throws IOException {
+    void boardCubesArrayShouldBeCreatedWhenIsEnoughDifferentCubes() throws IOException {
         //given
         GameConfiguration gameConfiguration = mock(GameConfiguration.class);
         GameConfiguration.Board boardConfig = mock(GameConfiguration.Board.class);
@@ -69,5 +68,7 @@ class BoardBuilderTest {
 
         //then
         assertThat(boardCubes, notNullValue());
+        assertThat(boardCubes.length, equalTo(boardConfig.getSize()));
+        assertThat(boardCubes[0].length, equalTo(boardConfig.getSize()));
     }
 }
