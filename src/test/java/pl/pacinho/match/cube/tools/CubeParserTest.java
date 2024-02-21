@@ -8,18 +8,18 @@ import pl.pacinho.match.cube.model.CubeSideType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class CubeParserTest {
 
+    private final String[] CUBE_SIDES_ARRAY = "SKY,MARSHALL,SKY_2,TRACKER,RYDER,CHASE".split(",");
+
     @Test
     void cubeShouldBeCreatedWhenGivenStringArrayIsCorrect() {
         //given
-        String[] array = "SKY,MARSHALL,SKY_2,TRACKER,RYDER,CHASE".split(",");
 
         //when
-        Cube cube = CubeParser.parseCube(array);
+        Cube cube = CubeParser.parseCube(CUBE_SIDES_ARRAY);
 
         //then
         assertThat(cube, not(nullValue()));
@@ -28,10 +28,9 @@ class CubeParserTest {
     @Test
     void createdCubeShouldHasCorrectSizeOfSides() {
         //given
-        String[] array = "SKY,MARSHALL,SKY_2,TRACKER,RYDER,CHASE".split(",");
 
         //when
-        Cube cube = CubeParser.parseCube(array);
+        Cube cube = CubeParser.parseCube(CUBE_SIDES_ARRAY);
 
         //then
         assertThat(cube.getCubeSide().size(), equalTo(CubeSideType.values().length));
@@ -40,10 +39,9 @@ class CubeParserTest {
     @Test
     void createdCubeShouldHasAllTypesOfSides() {
         //given
-        String[] array = "SKY,MARSHALL,SKY_2,TRACKER,RYDER,CHASE".split(",");
 
         //when
-        Cube cube = CubeParser.parseCube(array);
+        Cube cube = CubeParser.parseCube(CUBE_SIDES_ARRAY);
         CubeSideType[] cubeSideTypes = cube.getCubeSide().stream().map(CubeSide::sideType).toArray(CubeSideType[]::new);
 
         //then
@@ -54,10 +52,9 @@ class CubeParserTest {
     @Test
     void createdCubeShouldHasCorrectCubeSideImages() {
         //given
-        String[] array = "SKY,MARSHALL,SKY_2,TRACKER,RYDER,CHASE".split(",");
 
         //when
-        Cube cube = CubeParser.parseCube(array);
+        Cube cube = CubeParser.parseCube(CUBE_SIDES_ARRAY);
         CubeSideImage[] cubeSideImages = cube.getCubeSide()
                 .stream()
                 .map(CubeSide::cubeSideImage)
