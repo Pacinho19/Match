@@ -21,7 +21,7 @@ public class GameRestController {
     private final BoardBuilder boardBuilder;
 
     @GetMapping("/board/generate")
-    ResponseEntity<BoardCube[][]> generateBoard() throws IOException {
+    ResponseEntity<BoardCube[][]> generateBoard() throws IOException, IllegalStateException {
         return ResponseEntity.ok(
                 boardBuilder.buildBoard(new FileCubeReader(new ClassicFileReader(), new File(getClass().getClassLoader().getResource("static/data/cubes.txt").getFile())))
         );

@@ -19,13 +19,25 @@ public class BoardBuilder {
     private final GameConfiguration gameConfiguration;
     private final int BOARD_SIZE;
 
-    public BoardBuilder(GameConfiguration gameConfiguration) throws IOException {
+    public BoardBuilder(GameConfiguration gameConfiguration) {
         this.gameConfiguration = gameConfiguration;
         this.BOARD_SIZE = gameConfiguration.getBoard().getSize();
     }
 
-    public BoardCube[][] buildBoard(CubeReader cubeReader) throws IOException {
+    public BoardCube[][] buildBoard(CubeReader cubeReader) throws IOException, IllegalStateException {
         List<Cube> cubes = cubeReader.parseCubes();
+        if (cubes.size() < BOARD_SIZE * BOARD_SIZE)
+            throw new IllegalStateException("To few cubes to create board!");
+
+        BoardCube[][] board;
+        do {
+            board = generateBoard(cubes);
+        } while (!BoardValidator.isValid(board));
+
+        return board;
+    }
+
+    private BoardCube[][] generateBoard(List<Cube> cubes) {
         BoardCube[][] board = new BoardCube[BOARD_SIZE][BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
