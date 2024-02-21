@@ -10,4 +10,9 @@ public class BoardCubeSimple {
     public BoardCubeSimple(BoardCube boardCube) {
         this.cube = boardCube.getActiveCubeSideImage().name();
     }
+
+    @Override
+    public String toString() {
+        return cube;
+    }
 }
