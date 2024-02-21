@@ -14,4 +14,8 @@ public record BoardCube(Cube cube, CubeSideType activeSide) {
                 .map(CubeSide::cubeSideImage)
                 .orElseThrow(() -> new IllegalStateException("Cannot find active cube side image!"));
     }
+
+    public String toStringSimple() {
+        return getActiveCubeSideImage().name();
+    }
 }

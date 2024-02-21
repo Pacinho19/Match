@@ -52,13 +52,34 @@ class BoardBuilderTest {
     }
 
     @Test
-    void boardCubesArrayShouldBeCreatedWhenIsEnoughDifferentCubes() throws IOException {
+    void boardCubesArrayShouldBeCreatedWhenIsEnoughDifferentCubesForBoard3x3() throws IOException {
         //given
         GameConfiguration gameConfiguration = mock(GameConfiguration.class);
         GameConfiguration.Board boardConfig = mock(GameConfiguration.Board.class);
 
         given(gameConfiguration.getBoard()).willReturn(boardConfig);
         given(boardConfig.getSize()).willReturn(3);
+        FileCubeReader fileCubeReader = new FileCubeReader(classicFileReader, inputFile);
+
+        BoardBuilder boardBuilder = new BoardBuilder(gameConfiguration);
+
+        //when
+        BoardCube[][] boardCubes = boardBuilder.buildBoard(fileCubeReader);
+
+        //then
+        assertThat(boardCubes, notNullValue());
+        assertThat(boardCubes.length, equalTo(boardConfig.getSize()));
+        assertThat(boardCubes[0].length, equalTo(boardConfig.getSize()));
+    }
+
+    @Test
+    void boardCubesArrayShouldBeCreatedWhenIsEnoughDifferentCubesForBoard5x5() throws IOException {
+        //given
+        GameConfiguration gameConfiguration = mock(GameConfiguration.class);
+        GameConfiguration.Board boardConfig = mock(GameConfiguration.Board.class);
+
+        given(gameConfiguration.getBoard()).willReturn(boardConfig);
+        given(boardConfig.getSize()).willReturn(5);
         FileCubeReader fileCubeReader = new FileCubeReader(classicFileReader, inputFile);
 
         BoardBuilder boardBuilder = new BoardBuilder(gameConfiguration);

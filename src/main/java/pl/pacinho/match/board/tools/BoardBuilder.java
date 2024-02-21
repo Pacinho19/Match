@@ -11,6 +11,7 @@ import pl.pacinho.match.cube.tools.CubeReader;
 import pl.pacinho.match.utils.RandomUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,7 +32,7 @@ public class BoardBuilder {
 
         BoardCube[][] board;
         do {
-            board = generateBoard(cubes);
+            board = generateBoard(new ArrayList<>(cubes));
         } while (!BoardValidator.isValid(board));
 
         return board;
