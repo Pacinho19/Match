@@ -35,5 +35,6 @@ public class GameLogic {
 
         Player player = new Player(playerName, game.getPlayers().size() + 1);
         game.getPlayers().add(player);
+        game.setStatus(GameStatus.IN_PROGRESS);
     }
 }

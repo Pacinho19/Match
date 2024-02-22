@@ -13,6 +13,7 @@ import java.util.UUID;
 public class Game {
 
     private String id;
+    @Setter
     private GameStatus status;
     private LinkedList<Player> players;
     private Integer actualPlayer;

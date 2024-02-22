@@ -113,19 +113,17 @@ class GameLogicTest {
     @Test
     void playerShouldBeAddedToPlayersListWhenPlayerCanJoinToGame() {
         //given
-        Game game = mock(Game.class);
+        Game game = new Game("1");
         given(gameRepository.findById(anyString())).willReturn(game);
-        given(game.getStatus()).willReturn(GameStatus.NEW);
-        LinkedList<Player> players = new LinkedList<>(List.of(new Player("1", 1)));
-        given(game.getPlayers()).willReturn(players);
 
         //when
         gameLogic.joinGame("test-id", "2");
 
         //then
-        LinkedList<Player> expectedPlayers = new LinkedList<>(List.of(new Player("1", 1),new Player("2", 2) ));
-        assertThat(players, hasSize(2));
-        assertThat(players, is(expectedPlayers));
+        LinkedList<Player> expectedPlayers = new LinkedList<>(List.of(new Player("1", 1), new Player("2", 2)));
+        assertThat(game.getPlayers(), hasSize(2));
+        assertThat(game.getPlayers(), is(expectedPlayers));
+        assertThat(game.getStatus(), is(GameStatus.IN_PROGRESS));
     }
 
 }
