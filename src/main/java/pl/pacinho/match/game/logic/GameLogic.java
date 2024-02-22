@@ -23,9 +23,8 @@ public class GameLogic {
     }
 
     public void joinGame(String gameId, String playerName) {
-        Game game = gameRepository.findById(gameId);
-        if (game == null)
-            throw new GameNotFoundException(gameId);
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException(gameId));
 
         if (game.getStatus() != GameStatus.NEW)
             throw new IllegalStateException("Cannot join to " + gameId + ". Game status : " + game.getStatus());

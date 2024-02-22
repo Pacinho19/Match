@@ -1,39 +1,30 @@
 package pl.pacinho.match.game.repository;
 
 import org.springframework.stereotype.Repository;
-import pl.pacinho.match.game.exception.GameNotFoundException;
-import pl.pacinho.match.game.model.dto.GameDto;
 import pl.pacinho.match.game.model.entity.Game;
-import pl.pacinho.match.game.model.enums.GameStatus;
-import pl.pacinho.match.game.model.dto.mapper.GameDtoMapper;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class GameRepository {
 
     private final Map<String, Game> games = new HashMap<>();
 
-    public List<GameDto> getAvailableGames() {
+    public List<Game> getGames() {
         return games.values()
                 .stream()
-                .filter(game -> game.getStatus() != GameStatus.FINISHED)
-                .map(g -> GameDtoMapper.parse(g, null))
                 .toList();
     }
 
-    public String newGame(String playerName) {
-        Game game = new Game(playerName);
+    public String save(Game game) {
         games.put(game.getId(), game);
         return game.getId();
     }
 
-    public Game findById(String gameId) {
-        Game game = games.get(gameId);
-        if (game == null)
-            throw new GameNotFoundException(gameId);
-        return game;
+    public Optional<Game> findById(String gameId) {
+       return Optional.ofNullable(games.get(gameId));
     }
 }

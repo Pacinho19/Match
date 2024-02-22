@@ -12,13 +12,13 @@ import pl.pacinho.match.game.model.entity.Player;
 import pl.pacinho.match.game.model.enums.GameStatus;
 import pl.pacinho.match.game.repository.GameRepository;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -74,7 +74,7 @@ class GameLogicTest {
     @Test
     void gameNotFoundExceptionShouldBeThrownWhenGameIdNotExists() {
         //given
-        given(gameRepository.findById(anyString())).willReturn(null);
+        given(gameRepository.findById(anyString())).willReturn(Optional.empty());
 
         //when
         //then
@@ -85,7 +85,7 @@ class GameLogicTest {
     void illegalStateExceptionShouldBeThrownWhenGameStateIsDistinctFromNEW() {
         //given
         Game game = mock(Game.class);
-        given(gameRepository.findById(anyString())).willReturn(game);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
         given(game.getStatus()).willReturn(GameStatus.FINISHED);
 
         //when
@@ -99,7 +99,7 @@ class GameLogicTest {
     void illegalStateExceptionShouldBeThrownWhenFirstPlayerFromListEqualToJoiningPlayer() {
         //given
         Game game = new Game("1");
-        given(gameRepository.findById(anyString())).willReturn(game);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
 
         //when
         //then
@@ -111,7 +111,7 @@ class GameLogicTest {
     void playerShouldBeAddedToPlayersListWhenPlayerCanJoinToGame() {
         //given
         Game game = new Game("1");
-        given(gameRepository.findById(anyString())).willReturn(game);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
 
         //when
         gameLogic.joinGame("test-id", "2");
