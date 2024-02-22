@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.pacinho.match.board.model.BoardCube;
-import pl.pacinho.match.config.GameConfiguration;
+import pl.pacinho.match.config.MatchConfiguration;
 import pl.pacinho.match.cube.tools.FileCubeReader;
 import pl.pacinho.match.utils.ClassicFileReader;
 
@@ -37,14 +37,14 @@ class BoardBuilderTest {
     @Test
     void exceptionShouldBeThrownWhenCountOfAvailableCubesIsLessThanBoardSize() {
         //given
-        GameConfiguration gameConfiguration = mock(GameConfiguration.class);
-        GameConfiguration.Board boardConfig = mock(GameConfiguration.Board.class);
+        MatchConfiguration matchConfiguration = mock(MatchConfiguration.class);
+        MatchConfiguration.Board boardConfig = mock(MatchConfiguration.Board.class);
 
-        given(gameConfiguration.getBoard()).willReturn(boardConfig);
+        given(matchConfiguration.getBoard()).willReturn(boardConfig);
         given(boardConfig.getSize()).willReturn(10);
         FileCubeReader fileCubeReader = new FileCubeReader(classicFileReader, inputFile);
 
-        BoardBuilder boardBuilder = new BoardBuilder(gameConfiguration);
+        BoardBuilder boardBuilder = new BoardBuilder(matchConfiguration);
 
         //when
         //then
@@ -54,14 +54,14 @@ class BoardBuilderTest {
     @Test
     void boardCubesArrayShouldBeCreatedWhenIsEnoughDifferentCubesForBoard3x3() throws IOException {
         //given
-        GameConfiguration gameConfiguration = mock(GameConfiguration.class);
-        GameConfiguration.Board boardConfig = mock(GameConfiguration.Board.class);
+        MatchConfiguration matchConfiguration = mock(MatchConfiguration.class);
+        MatchConfiguration.Board boardConfig = mock(MatchConfiguration.Board.class);
 
-        given(gameConfiguration.getBoard()).willReturn(boardConfig);
-        given(boardConfig.getSize()).willReturn(5);
+        given(matchConfiguration.getBoard()).willReturn(boardConfig);
+        given(boardConfig.getSize()).willReturn(3);
         FileCubeReader fileCubeReader = new FileCubeReader(classicFileReader, inputFile);
 
-        BoardBuilder boardBuilder = new BoardBuilder(gameConfiguration);
+        BoardBuilder boardBuilder = new BoardBuilder(matchConfiguration);
 
         //when
         BoardCube[][] boardCubes = boardBuilder.buildBoard(fileCubeReader);
@@ -75,14 +75,14 @@ class BoardBuilderTest {
     @Test
     void boardCubesArrayShouldBeCreatedWhenIsEnoughDifferentCubesForBoard5x5() throws IOException {
         //given
-        GameConfiguration gameConfiguration = mock(GameConfiguration.class);
-        GameConfiguration.Board boardConfig = mock(GameConfiguration.Board.class);
+        MatchConfiguration matchConfiguration = mock(MatchConfiguration.class);
+        MatchConfiguration.Board boardConfig = mock(MatchConfiguration.Board.class);
 
-        given(gameConfiguration.getBoard()).willReturn(boardConfig);
+        given(matchConfiguration.getBoard()).willReturn(boardConfig);
         given(boardConfig.getSize()).willReturn(5);
         FileCubeReader fileCubeReader = new FileCubeReader(classicFileReader, inputFile);
 
-        BoardBuilder boardBuilder = new BoardBuilder(gameConfiguration);
+        BoardBuilder boardBuilder = new BoardBuilder(matchConfiguration);
 
         //when
         BoardCube[][] boardCubes = boardBuilder.buildBoard(fileCubeReader);

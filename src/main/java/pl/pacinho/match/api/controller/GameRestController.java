@@ -1,4 +1,4 @@
-package pl.pacinho.match.controller;
+package pl.pacinho.match.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

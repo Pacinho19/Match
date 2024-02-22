@@ -1,10 +1,8 @@
 package pl.pacinho.match.board.tools;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.pacinho.match.board.model.BoardCube;
-import pl.pacinho.match.config.GameConfiguration;
+import pl.pacinho.match.config.MatchConfiguration;
 import pl.pacinho.match.cube.model.Cube;
 import pl.pacinho.match.cube.model.CubeSideType;
 import pl.pacinho.match.cube.tools.CubeReader;
@@ -17,12 +15,12 @@ import java.util.List;
 @Service
 public class BoardBuilder {
 
-    private final GameConfiguration gameConfiguration;
+    private final MatchConfiguration matchConfiguration;
     private final int BOARD_SIZE;
 
-    public BoardBuilder(GameConfiguration gameConfiguration) {
-        this.gameConfiguration = gameConfiguration;
-        this.BOARD_SIZE = gameConfiguration.getBoard().getSize();
+    public BoardBuilder(MatchConfiguration matchConfiguration) {
+        this.matchConfiguration = matchConfiguration;
+        this.BOARD_SIZE = matchConfiguration.getBoard().getSize();
     }
 
     public BoardCube[][] buildBoard(CubeReader cubeReader) throws IOException, IllegalStateException {

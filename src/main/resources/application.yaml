@@ -1,3 +1,5 @@
 match:
+  game:
+    max-active-games: 10
   board:
     size: 5

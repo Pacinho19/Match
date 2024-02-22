@@ -3,6 +3,7 @@ package pl.pacinho.match.config;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,13 +12,21 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 @ConfigurationProperties(prefix = "match")
-public class GameConfiguration {
+public class MatchConfiguration {
 
     private Board board;
+    private Game game;
 
     public static class Board {
         @Setter
         @Getter
         private int size;
+    }
+
+    public static class Game {
+        @Setter
+        @Getter
+        @Value("${max-active-games")
+        private int maxActiveGames;
     }
 }
