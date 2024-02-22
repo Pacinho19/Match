@@ -58,7 +58,7 @@ class BoardBuilderTest {
         GameConfiguration.Board boardConfig = mock(GameConfiguration.Board.class);
 
         given(gameConfiguration.getBoard()).willReturn(boardConfig);
-        given(boardConfig.getSize()).willReturn(3);
+        given(boardConfig.getSize()).willReturn(5);
         FileCubeReader fileCubeReader = new FileCubeReader(classicFileReader, inputFile);
 
         BoardBuilder boardBuilder = new BoardBuilder(gameConfiguration);
