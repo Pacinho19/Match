@@ -1,9 +1,9 @@
 package pl.pacinho.match.game.model.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.ArrayList;
-
+@EqualsAndHashCode
 @Getter
 public class Player {
 
