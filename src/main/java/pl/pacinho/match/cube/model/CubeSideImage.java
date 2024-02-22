@@ -3,7 +3,6 @@ package pl.pacinho.match.cube.model;
 public enum CubeSideImage {
 
     RYDER,
-    RYDER_2,
     ZUMA,
     ZUMA_2,
     SKY,
@@ -17,7 +16,5 @@ public enum CubeSideImage {
     MARSHALL,
     MARSHALL_2,
     EVEREST,
-    EVEREST_2,
-    TRACKER,
-    TRACKER_2
+    TRACKER
 }
