@@ -98,11 +98,8 @@ class GameLogicTest {
     @Test
     void illegalStateExceptionShouldBeThrownWhenFirstPlayerFromListEqualToJoiningPlayer() {
         //given
-        Game game = mock(Game.class);
+        Game game = new Game("1");
         given(gameRepository.findById(anyString())).willReturn(game);
-        given(game.getStatus()).willReturn(GameStatus.NEW);
-        LinkedList<Player> players = new LinkedList<>(List.of(new Player("1", 0)));
-        given(game.getPlayers()).willReturn(players);
 
         //when
         //then
