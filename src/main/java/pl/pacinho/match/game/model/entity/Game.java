@@ -19,6 +19,8 @@ public class Game {
     @Setter
     private GameStatus status;
     private LinkedList<Player> players;
+
+    @Setter
     private Integer actualPlayer;
     private LocalDateTime startTime;
     @Setter

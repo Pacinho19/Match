@@ -1,6 +1,6 @@
-<div style="text-align:center" th:fragment="cubeFrag"  th:if="${game.moveCube!=null}">
-    <div class="center scene">
-        <div class="cube">
+<div style="text-align:center" th:fragment="cubeFrag" >
+    <div class="center scene" th:if="${game.moveCube!=null}">
+        <div class="cube" id="cube-div">
             <div th:each="cubeSideEntry : ${game.moveCube.getCubeSideMap()}" class="cube__face" th:classappend="${'cube__face--' + #strings.toLowerCase(cubeSideEntry.key)}"> <img th:src="${'/data/images/' + cubeSideEntry.value + '.png'}" alt="" /></div>
 <!--            <div class="cube__face cube__face&#45;&#45;back"> <img src="/data/images/CHASE.png" alt="" /></div>-->
 <!--            <div class="cube__face cube__face&#45;&#45;right"> <img src="/data/images/SKY.png" alt="" /></div>-->
@@ -9,7 +9,7 @@
 <!--            <div class="cube__face cube__face&#45;&#45;bottom"> <img src="/data/images/EVEREST.png" alt="" /></div>-->
         </div>
     </div>
-    <div class="radio-group">
+    <div class="radio-group" id="radio-group" th:style="${game.moveCube!=null ? 'display:block' : 'display:none'}">
         <label>
             <input type="radio" name="rotate-cube-side" value="front" checked/> front
         </label>

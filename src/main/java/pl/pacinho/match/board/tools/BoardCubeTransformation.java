@@ -13,7 +13,9 @@ public class BoardCubeTransformation {
 
     private static BoardCube[] getOppositeBoardRow(BoardCube[] boardCubeArray) {
         return Arrays.stream(boardCubeArray)
-                .map(boardCube -> new BoardCube(boardCube.cube(), boardCube.activeSide().getOppositeSide()))
+                .map(boardCube -> boardCube == null
+                        ? null
+                        : new BoardCube(boardCube.cube(), boardCube.activeSide().getOppositeSide()))
                 .toArray(BoardCube[]::new);
     }
 }

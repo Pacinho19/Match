@@ -2,6 +2,7 @@ package pl.pacinho.match.game.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.pacinho.match.game.config.GameEndpointsConfig;
 import pl.pacinho.match.game.logic.GameLogic;
 import pl.pacinho.match.game.model.dto.GameDto;
+import pl.pacinho.match.game.model.dto.Move;
 import pl.pacinho.match.game.model.enums.GameStatus;
 import pl.pacinho.match.game.service.GameService;
 import pl.pacinho.match.home.config.HomeEndpointsConfig;
@@ -20,6 +22,7 @@ public class GameController {
 
     private final GameService gameService;
     private final GameLogic gameLogic;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @PostMapping(GameEndpointsConfig.GAMES)
     public String availableGames(Model model) {
@@ -95,5 +98,15 @@ public class GameController {
         model.addAttribute("game", gameService.findDtoById(gameId, authentication.getName()));
         return "fragments/board :: boardFrag";
     }
+
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PostMapping(GameEndpointsConfig.GAME_MOVE)
+    public void shot(Authentication authentication,
+                     @RequestBody Move moveDto,
+                     @PathVariable(value = "gameId") String gameId) {
+        gameLogic.move(gameId, moveDto);
+        simpMessagingTemplate.convertAndSend("/reload-board/" + gameId, "");
+    }
+
 
 }

@@ -37,7 +37,7 @@ public class GameDtoMapper {
 
     private static CubeSideImage[] getCubeImageArray(BoardCube[] boardCellArr) {
         return Arrays.stream(boardCellArr)
-                .map(BoardCube::getActiveCubeSideImage)
+                .map(bc -> bc == null ? null : bc.getActiveCubeSideImage())
                 .toArray(CubeSideImage[]::new);
     }
 

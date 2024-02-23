@@ -2,8 +2,10 @@ package pl.pacinho.match.game.logic;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.pacinho.match.board.model.BoardCube;
 import pl.pacinho.match.game.exception.GameNotFoundException;
 import pl.pacinho.match.game.model.dto.GameDto;
+import pl.pacinho.match.game.model.dto.Move;
 import pl.pacinho.match.game.model.entity.Game;
 import pl.pacinho.match.game.model.entity.Player;
 import pl.pacinho.match.game.model.enums.GameStatus;
@@ -54,5 +56,24 @@ public class GameLogic {
         return game.getPlayers()
                 .stream()
                 .anyMatch(p -> p.equals(name));
+    }
+
+    public void move(String gameId, Move moveDto) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException(gameId));
+
+        BoardCube boardCube = game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()];
+        if (moveDto.cubeSideType() != null) {
+            game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()] = new BoardCube(game.getMoveCube(), game.getActualPlayer() == 1 ? moveDto.cubeSideType() : moveDto.cubeSideType().getOppositeSide());
+        } else {
+            game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()] = null;
+        }
+
+        game.setMoveCube(boardCube.cube());
+        game.setActualPlayer(getNextPlayer(game.getActualPlayer()));
+    }
+
+    private Integer getNextPlayer(Integer actualPlayer) {
+        return actualPlayer == 1 ? 2 : 1;
     }
 }
