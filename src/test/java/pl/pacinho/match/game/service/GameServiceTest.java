@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import pl.pacinho.match.config.MatchConfiguration;
+import pl.pacinho.match.game.exception.GameNotFoundException;
 import pl.pacinho.match.game.model.dto.GameDto;
 import pl.pacinho.match.game.model.entity.Game;
 import pl.pacinho.match.game.model.enums.GameStatus;
@@ -17,6 +18,7 @@ import pl.pacinho.match.game.repository.GameRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -98,8 +100,29 @@ class GameServiceTest {
     }
 
     @Test
-    void gameNotFoundExceptionShouldBeThrownWhenGivenGameIdNotExists(){
-        //TODO
+    void gameNotFoundExceptionShouldBeThrownWhenGivenGameIdNotExists() {
+        //given
+        given(gameRepository.findById(anyString())).willReturn(Optional.empty());
+        String gameId = "test-id";
+
+        //when
+        //then
+        Exception exception = assertThrows(GameNotFoundException.class, () -> gameService.findDtoById(gameId, null));
+        assertThat(exception.getMessage(), containsString(gameId));
+    }
+
+    @Test
+    void gameDtoShouldBeReturnedWhenGameExists(){
+        //given
+        Game game = mock(Game.class);
+        given(gameRepository.findById(anyString())).willReturn(Optional.ofNullable(game));
+        String gameId = "test-id";
+
+        //when
+        GameDto gameDto = gameService.findDtoById(gameId, null);
+
+        //then
+        assertThat(gameDto, notNullValue());
     }
 
     private List<Game> getGamesWithFinishedStatus() {
