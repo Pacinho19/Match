@@ -26,6 +26,15 @@ public class BoardCube {
                 .orElseThrow(() -> new IllegalStateException("Cannot find active cube side image!"));
     }
 
+    public CubeSideImage getCubeSideImageBySide(CubeSideType side) {
+        return cube.getCubeSide()
+                .stream()
+                .filter(cubeSide -> cubeSide.sideType() == side)
+                .findFirst()
+                .map(CubeSide::cubeSideImage)
+                .orElseThrow(() -> new IllegalStateException("Cannot find cube side image by given side: " + side));
+    }
+
     public CubeSideType activeSide() {
         return activeSide;
     }
