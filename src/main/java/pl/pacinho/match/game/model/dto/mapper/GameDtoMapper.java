@@ -22,7 +22,16 @@ public class GameDtoMapper {
                 .startTime(game.getStartTime())
                 .playerBoard(getPlayersBoard(game.getGameBoard(), playerIndex))
                 .moveCube(Objects.equals(playerIndex, game.getActualPlayer()) ? game.getMoveCube() : null)
+                .bonusImages(getBonusImagesForPlayer(game.getPlayers(), playerIndex))
                 .build();
+    }
+
+    private static List<CubeSideImage> getBonusImagesForPlayer(LinkedList<Player> players, Integer playerIndex) {
+        return players.stream()
+                .filter(p -> Objects.equals(playerIndex, p.getIndex()))
+                .findFirst()
+                .map(Player::getBonusImages)
+                .orElse(Collections.emptyList());
     }
 
     private static CubeSideImage[][] getPlayersBoard(GameBoard gameBoard, Integer playerIndex) {

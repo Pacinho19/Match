@@ -4,8 +4,16 @@
     <span style='display:none'  id="playerName" sec:authentication="name"></span>
 
     <div class="row" style="margin-top:1%; height: 90vh;width: 100vw;">
-        <div class="col-md-1" style="text-align:center">
-
+        <div class="col-md-3" style="text-align:center">
+            <h4>Collect row or column with the same image for win 1 point!</h4>
+            <h4>Get extra point for given images:</h4>
+            <table class="row justify-content-center" style="margin-top:1%">
+                <tr class="d-flex bd-highlight board-row">
+                    <td th:each="card : ${game.bonusImages}" class="col-md-5" style="border-style: solid;margin:1%;padding:1%">
+                        <img th:src="${'/data/images/' + card + '.png'}" width="100%" height="100%">
+                    </td>
+                </tr>
+            </table>
         </div>
         <div class="col-md-5" style="text-align:center;height:100%;width:100%;">
 
@@ -22,7 +30,7 @@
             </table>
 
         </div>
-        <div class="col-md-5 d-flex align-content-around" style="text-align:center;height:100%;width:100%;">
+        <div class="col-md-3 d-flex align-content-around" style="text-align:center;height:100%;width:100%;">
             <div th:replace="fragments/cube :: cubeFrag" />
         </div>
         <div class="col-md-1" style="text-align:center">

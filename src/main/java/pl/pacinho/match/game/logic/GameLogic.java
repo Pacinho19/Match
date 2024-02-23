@@ -3,6 +3,7 @@ package pl.pacinho.match.game.logic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.pacinho.match.board.model.BoardCube;
+import pl.pacinho.match.cube.model.CubeSideImage;
 import pl.pacinho.match.game.exception.GameNotFoundException;
 import pl.pacinho.match.game.model.dto.GameDto;
 import pl.pacinho.match.game.model.dto.Move;
@@ -10,6 +11,14 @@ import pl.pacinho.match.game.model.entity.Game;
 import pl.pacinho.match.game.model.entity.Player;
 import pl.pacinho.match.game.model.enums.GameStatus;
 import pl.pacinho.match.game.repository.GameRepository;
+import pl.pacinho.match.utils.RandomUtils;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 
 @RequiredArgsConstructor
@@ -37,6 +46,7 @@ public class GameLogic {
         Player player = new Player(playerName, game.getPlayers().size() + 1);
         game.getPlayers().add(player);
         game.setStatus(GameStatus.IN_PROGRESS);
+        setBonusImages(game.getPlayers());
     }
 
     public boolean checkOpenGamePage(GameDto gameDto, String playerName) {
@@ -75,5 +85,20 @@ public class GameLogic {
 
     private Integer getNextPlayer(Integer actualPlayer) {
         return actualPlayer == 1 ? 2 : 1;
+    }
+
+    private void setBonusImages(LinkedList<Player> players) {
+        List<CubeSideImage> images = new ArrayList<>(Arrays.asList(CubeSideImage.values()));
+
+        players.forEach(
+                player -> IntStream.rangeClosed(1, 2)
+                        .boxed()
+                        .forEach(i -> {
+                            int idx = RandomUtils.getRandom(0, images.size());
+                            player.getBonusImages()
+                                    .add(images.get(idx));
+                            images.remove(idx);
+                        })
+        );
     }
 }

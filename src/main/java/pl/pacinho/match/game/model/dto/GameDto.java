@@ -23,4 +23,5 @@ public class GameDto {
     private LocalDateTime startTime;
     private CubeSideImage[][] playerBoard;
     private Cube moveCube;
+    private List<CubeSideImage> bonusImages;
 }
