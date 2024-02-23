@@ -32,10 +32,12 @@ class GameLogicTest {
     @Mock
     private GameRepository gameRepository;
 
+    @Mock
+    private GameDto gameDto;
+
     @Test
     void cannotJoinGameWhenPlayersSizeIsEqual2() {
         //given
-        GameDto gameDto = mock(GameDto.class);
         given(gameDto.getPlayers()).willReturn(List.of("1", "2"));
 
         //when
@@ -48,7 +50,6 @@ class GameLogicTest {
     @Test
     void cannotJoinGameWhenPlayerAlreadyJoined() {
         //given
-        GameDto gameDto = mock(GameDto.class);
         given(gameDto.getPlayers()).willReturn(List.of("1"));
 
         //when
@@ -61,7 +62,6 @@ class GameLogicTest {
     @Test
     void canJoinGameWhenPlayersSizeIsEqual1() {
         //given
-        GameDto gameDto = mock(GameDto.class);
         given(gameDto.getPlayers()).willReturn(List.of("1"));
 
         //when
@@ -122,5 +122,87 @@ class GameLogicTest {
         assertThat(game.getPlayers(), is(expectedPlayers));
         assertThat(game.getStatus(), is(GameStatus.IN_PROGRESS));
     }
+
+    @Test
+    void illegalStateExceptionShouldBeThrownWhenGameStatusIsFinished() {
+        //given
+        GameDto gameDto = GameDto.builder()
+                .status(GameStatus.FINISHED)
+                .build();
+
+        //when
+        //then
+        Exception exception = assertThrows(IllegalStateException.class, () -> gameLogic.checkOpenGamePage(gameDto, null));
+        assertThat(exception.getMessage(), containsString("finished!"));
+    }
+
+    @Test
+    void illegalStateExceptionShouldBeThrownWhenGameStatusIsNew() {
+        //given
+        GameDto gameDto = GameDto.builder()
+                .status(GameStatus.NEW)
+                .build();
+
+        //when
+        //then
+        Exception exception = assertThrows(IllegalStateException.class, () -> gameLogic.checkOpenGamePage(gameDto, null));
+        assertThat(exception.getMessage(), containsString("has not started!"));
+    }
+
+    @Test
+    void illegalStateExceptionShouldBeThrownWhenGameInProgressAndGamePlayersNotContainingGivenPlayer() {
+        //given
+        GameDto gameDto = getInProgressGameWithTwoPlayers();
+
+        //when
+        //then
+        Exception exception = assertThrows(IllegalStateException.class, () -> gameLogic.checkOpenGamePage(gameDto, "3"));
+        assertThat(exception.getMessage(), containsString("You can't open game page!"));
+    }
+
+    @Test
+    void canOpenGamePageShouldBeReturnedTrueWhenGameIsInProgressAndGamePlayersContainingGivenPlayer() {
+        //given
+        GameDto gameDto = getInProgressGameWithTwoPlayers();
+
+        //when
+        boolean canOpenGamePage = gameLogic.checkOpenGamePage(gameDto, "1");
+
+        //then
+        assertThat(canOpenGamePage, is(true));
+    }
+
+    @Test
+    void playerShouldBeActiveInGameWhenGamePlayersContainingGivenPlayer() {
+        //given
+        GameDto gameDto = getInProgressGameWithTwoPlayers();
+
+        //when
+        boolean isActivePlayer = gameLogic.isPlayerActiveInGame("1", gameDto);
+
+        //then
+        assertThat(isActivePlayer, is(true));
+    }
+
+    @Test
+    void playerShouldBeNotActiveInGameWhenGamePlayersNotContainingGivenPlayer() {
+        //given
+        GameDto gameDto = getInProgressGameWithTwoPlayers();
+
+        //when
+        boolean isActivePlayer = gameLogic.isPlayerActiveInGame("3", gameDto);
+
+        //then
+        assertThat(isActivePlayer, is(false));
+    }
+
+
+    private static GameDto getInProgressGameWithTwoPlayers() {
+        return GameDto.builder()
+                .status(GameStatus.IN_PROGRESS)
+                .players(List.of("1", "2"))
+                .build();
+    }
+
 
 }
