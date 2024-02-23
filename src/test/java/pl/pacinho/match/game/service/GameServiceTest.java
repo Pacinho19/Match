@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import pl.pacinho.match.board.model.BoardCube;
+import pl.pacinho.match.board.tools.FileBoardBuilder;
 import pl.pacinho.match.config.MatchConfiguration;
 import pl.pacinho.match.game.exception.GameNotFoundException;
 import pl.pacinho.match.game.model.dto.GameDto;
@@ -15,6 +17,7 @@ import pl.pacinho.match.game.model.entity.Game;
 import pl.pacinho.match.game.model.enums.GameStatus;
 import pl.pacinho.match.game.repository.GameRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +41,9 @@ class GameServiceTest {
     private MatchConfiguration matchConfiguration;
     @Mock
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Mock
+    private FileBoardBuilder fileBoardBuilder;
 
     @Test
     void availableGamesListShouldBeEmptyWhenAllGamesHasFinishedStatus() {
@@ -84,19 +90,21 @@ class GameServiceTest {
     }
 
     @Test
-    void gameIdShouldBeReturnedWhenGameCreatedSuccessfully() {
+    void gameIdShouldBeReturnedWhenGameCreatedSuccessfully() throws IOException {
         //given
         MatchConfiguration.Game gameConfig = mock(MatchConfiguration.Game.class);
         given(matchConfiguration.getGame()).willReturn(gameConfig);
         given(gameConfig.getMaxActiveGames()).willReturn(1);
         given(gameRepository.getGames()).willReturn(Collections.emptyList());
         given(gameRepository.save(ArgumentMatchers.any(Game.class))).willReturn("test-id");
+        given(fileBoardBuilder.buildBoard()).willReturn(new BoardCube[][]{});
 
         //when
         String gameId = gameService.newGame("1");
         //then
         assertThat(gameId, is("test-id"));
         verify(simpMessagingTemplate, times(1)).convertAndSend("/game-created", "");
+        verify(fileBoardBuilder, times(1)).buildBoard();
     }
 
     @Test
@@ -112,7 +120,7 @@ class GameServiceTest {
     }
 
     @Test
-    void gameDtoShouldBeReturnedWhenGameExists(){
+    void gameDtoShouldBeReturnedWhenGameExists() {
         //given
         Game game = mock(Game.class);
         given(gameRepository.findById(anyString())).willReturn(Optional.ofNullable(game));
