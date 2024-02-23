@@ -14,9 +14,9 @@ public class FileBoardBuilder extends BoardBuilder {
 
     private final FileCubeReader fileCubeReader;
 
-    public FileBoardBuilder(MatchConfiguration _matchConfiguration, MatchConfiguration matchConfiguration) {
+    public FileBoardBuilder(MatchConfiguration _matchConfiguration) {
         super(_matchConfiguration);
-        this.fileCubeReader = new FileCubeReader(new ClassicFileReader(), getCubesFile(matchConfiguration));
+        this.fileCubeReader = new FileCubeReader(new ClassicFileReader(), getCubesFile(_matchConfiguration));
     }
 
     private File getCubesFile(MatchConfiguration matchConfiguration) {
