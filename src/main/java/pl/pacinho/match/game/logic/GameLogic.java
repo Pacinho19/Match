@@ -36,4 +36,23 @@ public class GameLogic {
         game.getPlayers().add(player);
         game.setStatus(GameStatus.IN_PROGRESS);
     }
+
+    public boolean checkOpenGamePage(GameDto gameDto, String playerName) {
+        if (gameDto.getStatus() == GameStatus.FINISHED)
+            throw new IllegalStateException("Game " + gameDto.getId() + " finished!");
+
+        if (gameDto.getStatus() == GameStatus.NEW)
+            throw new IllegalStateException("Game " + gameDto.getId() + " has not started!");
+
+        if (!isPlayerActiveInGame(playerName, gameDto))
+            throw new IllegalStateException("Game " + gameDto.getId() + " in progress! You can't open game page!");
+
+        return true;
+    }
+
+    public boolean isPlayerActiveInGame(String name, GameDto game) {
+        return game.getPlayers()
+                .stream()
+                .anyMatch(p -> p.equals(name));
+    }
 }

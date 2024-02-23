@@ -1,12 +1,11 @@
 package pl.pacinho.match.game.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.pacinho.match.game.config.GameEndpointsConfig;
 import pl.pacinho.match.game.logic.GameLogic;
@@ -70,5 +69,31 @@ public class GameController {
         return "fragments/game-players :: gamePlayersFrag";
     }
 
+    @GetMapping(GameEndpointsConfig.GAME_PAGE)
+    public String gamePage(@PathVariable(value = "gameId") String gameId,
+                           Model model,
+                           Authentication authentication,
+                           RedirectAttributes redirectAttrs) {
+
+        try {
+            GameDto gameDto = gameService.findDtoById(gameId, authentication.getName());
+            gameLogic.checkOpenGamePage(gameDto, authentication.getName());
+
+            model.addAttribute("game", gameDto);
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", e.getMessage());
+            return "redirect:/" + HomeEndpointsConfig.HOME;
+        }
+
+        return "game";
+    }
+
+    @GetMapping(GameEndpointsConfig.GAME_BOARD_RELOAD)
+    public String reloadBoard(Authentication authentication,
+                              Model model,
+                              @PathVariable(value = "gameId") String gameId) {
+        model.addAttribute("game", gameService.findDtoById(gameId, authentication.getName()));
+        return "fragments/board :: boardFrag";
+    }
 
 }

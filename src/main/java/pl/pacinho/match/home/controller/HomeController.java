@@ -9,7 +9,7 @@ public class HomeController {
 
     @GetMapping
     String home() {
-        return "redirect:/" + HomeEndpointsConfig.HOME;
+        return "redirect:" + HomeEndpointsConfig.HOME;
     }
 
     @GetMapping(HomeEndpointsConfig.HOME)

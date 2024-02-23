@@ -1,0 +1,16 @@
+<div th:fragment="boardFrag" id="board" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <input type="hidden" id="gameId" th:value="${game.id}">
+    <span style='display:none'  id="playerName" sec:authentication="name"></span>
+
+    <div class="row" style="margin-top:1%; height: 90vh;width: 100vw;">
+        <div class="col-md-2" style="text-align:center">
+
+        </div>
+        <div class="col-md-8" style="text-align:center;height:100%;width:100%;">
+
+        </div>
+        <div class="col-md-2" style="text-align:center">
+        </div>
+    </div>
+</div>
