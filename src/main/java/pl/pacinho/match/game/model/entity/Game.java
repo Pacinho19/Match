@@ -2,6 +2,7 @@ package pl.pacinho.match.game.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.pacinho.match.board.model.BoardCube;
 import pl.pacinho.match.board.model.GameBoard;
 import pl.pacinho.match.game.model.enums.GameStatus;
 
@@ -29,6 +30,7 @@ public class Game {
         this.status = GameStatus.NEW;
         this.startTime = LocalDateTime.now();
         this.actualPlayer = 1;
+        this.gameBoard = new GameBoard(new BoardCube[][]{});
     }
 
 }

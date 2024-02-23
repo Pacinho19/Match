@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import pl.pacinho.match.board.model.BoardCube;
+import pl.pacinho.match.board.model.GameBoard;
 import pl.pacinho.match.board.tools.FileBoardBuilder;
 import pl.pacinho.match.config.MatchConfiguration;
 import pl.pacinho.match.game.exception.GameNotFoundException;
@@ -75,10 +76,10 @@ class GameServiceTest {
     void illegalStateExceptionShouldBeThrownWhenActiveGamesCountIsGreaterThanLimit() {
         //given
         MatchConfiguration.Game gameConfig = mock(MatchConfiguration.Game.class);
-        List<Game> games = List.of(mock(Game.class));
+        List<Game> games = List.of(new Game("1"));
+        given(gameRepository.getGames()).willReturn(games);
         given(matchConfiguration.getGame()).willReturn(gameConfig);
         given(gameConfig.getMaxActiveGames()).willReturn(1);
-        given(gameRepository.getGames()).willReturn(games);
 
         //when
         //then
@@ -122,8 +123,8 @@ class GameServiceTest {
     @Test
     void gameDtoShouldBeReturnedWhenGameExists() {
         //given
-        Game game = mock(Game.class);
-        given(gameRepository.findById(anyString())).willReturn(Optional.ofNullable(game));
+        Game game = new Game("1");
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
         String gameId = "test-id";
 
         //when

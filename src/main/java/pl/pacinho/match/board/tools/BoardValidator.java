@@ -22,7 +22,7 @@ public class BoardValidator {
         return validBoard(BoardCubeTransformation.getOppositeBoard(board));
     }
 
-    private static boolean validBoard(BoardCube[][] board) {
+    public static boolean validBoard(BoardCube[][] board) {
         for (int i = 0; i < board.length; i++) {
             if (!checkDirectionIsValid(board[i]))
                 return false;

@@ -84,9 +84,43 @@ class BoardValidatorTest {
         };
 
         //when
+        boolean isValid = BoardValidator.validBoard(board);
+
+        //then
+        assertThat(isValid).isTrue();
+    }
+
+    @Test
+    void boardShouldBeValidWhenInEachRowAndColIsMaxTwoTheSameCubeImageInBothBoardSide() {
+        //given
+        /** Board Side
+         * MA ZU MA
+         * SK RU TR
+         * RO EV RY
+         */
+
+        /** Opposite Board Side
+         * MA ZU MA
+         * SK RU TR
+         * RO EV RY
+         */
+        BoardCube[][] board = {
+                { new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.MARSHALL))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.ZUMA), new CubeSide(CubeSideType.BACK, CubeSideImage.ZUMA))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.MARSHALL))), CubeSideType.FRONT)},
+                { new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.SKY), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.RUBBLE), new CubeSide(CubeSideType.BACK, CubeSideImage.RUBBLE))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.TRACKER), new CubeSide(CubeSideType.BACK, CubeSideImage.TRACKER))), CubeSideType.FRONT)},
+                { new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.ROCKY), new CubeSide(CubeSideType.BACK, CubeSideImage.ROCKY))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.EVEREST), new CubeSide(CubeSideType.BACK, CubeSideImage.EVEREST))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.RYDER), new CubeSide(CubeSideType.BACK, CubeSideImage.RYDER))), CubeSideType.FRONT)}
+        };
+
+        //when
         boolean isValid = BoardValidator.isValid(board);
 
         //then
         assertThat(isValid).isTrue();
     }
+
 }
