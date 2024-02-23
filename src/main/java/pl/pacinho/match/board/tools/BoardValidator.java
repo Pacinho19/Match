@@ -29,18 +29,11 @@ public class BoardValidator {
         }
 
         for (int j = 0; j < board[0].length; j++) {
-            if (!checkDirectionIsValid(getBoardColumn(board, j)))
+            if (!checkDirectionIsValid(BoardCubeTransformation.getBoardColumn(board, j)))
                 return false;
         }
 
         return true;
-    }
-
-    private static BoardCube[] getBoardColumn(BoardCube[][] board, int j) {
-        return IntStream.range(0, board.length)
-                .boxed()
-                .map(row -> board[row][j])
-                .toArray(BoardCube[]::new);
     }
 
     private static boolean checkDirectionIsValid(BoardCube[] cubes) {

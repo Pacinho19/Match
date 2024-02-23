@@ -3,6 +3,7 @@ package pl.pacinho.match.game.logic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.pacinho.match.board.model.BoardCube;
+import pl.pacinho.match.board.tools.GameBoardMatch;
 import pl.pacinho.match.cube.model.CubeSideImage;
 import pl.pacinho.match.game.exception.GameNotFoundException;
 import pl.pacinho.match.game.model.dto.GameDto;
@@ -81,6 +82,15 @@ public class GameLogic {
 
         game.setMoveCube(boardCube.cube());
         game.setActualPlayer(getNextPlayer(game.getActualPlayer()));
+        if (isFinishGame(game)){
+            System.out.println("Match!");
+            //TODO Check which player won and create message
+            game.setStatus(GameStatus.FINISHED);
+        }
+    }
+
+    private boolean isFinishGame(Game game) {
+        return GameBoardMatch.isMatch(game.getGameBoard().getBoard());
     }
 
     private Integer getNextPlayer(Integer actualPlayer) {
