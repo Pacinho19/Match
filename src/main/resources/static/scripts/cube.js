@@ -3,6 +3,9 @@ var radioGroup = document.querySelector('.radio-group');
 var currentClass = '';
 
 function changeSide() {
+  if(radioGroup==null)
+    return;
+
   var checkedRadio = radioGroup.querySelector(':checked');
   var showClass = 'show-' + checkedRadio.value;
   if ( currentClass ) {

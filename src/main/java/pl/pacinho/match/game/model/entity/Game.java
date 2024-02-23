@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.match.board.model.BoardCube;
 import pl.pacinho.match.board.model.GameBoard;
+import pl.pacinho.match.cube.model.Cube;
 import pl.pacinho.match.game.model.enums.GameStatus;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,8 @@ public class Game {
     private LocalDateTime startTime;
     @Setter
     private GameBoard gameBoard;
+    @Setter
+    private Cube moveCube;
 
     public Game(String player1) {
         players = new LinkedList<>();

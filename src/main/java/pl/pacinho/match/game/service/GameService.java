@@ -43,6 +43,7 @@ public class GameService {
 
         Game game = new Game(playerName);
         game.setGameBoard(new GameBoard(boardBuilder.buildBoard()));
+//        game.setMoveCube(game.getGameBoard().getBoard()[0][0].cube()); //TEST
         String gameId = gameRepository.save(game);
 
         simpMessagingTemplate.convertAndSend("/game-created", "");

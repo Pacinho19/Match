@@ -21,6 +21,7 @@ public class GameDtoMapper {
                 .actualPlayer(game.getActualPlayer())
                 .startTime(game.getStartTime())
                 .playerBoard(getPlayersBoard(game.getGameBoard(), playerIndex))
+                .moveCube(Objects.equals(playerIndex, game.getActualPlayer()) ? game.getMoveCube() : null)
                 .build();
     }
 

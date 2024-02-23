@@ -3,7 +3,7 @@ package pl.pacinho.match.game.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import pl.pacinho.match.board.model.BoardCube;
+import pl.pacinho.match.cube.model.Cube;
 import pl.pacinho.match.cube.model.CubeSideImage;
 import pl.pacinho.match.game.model.enums.GameStatus;
 
@@ -22,4 +22,5 @@ public class GameDto {
     private Integer actualPlayer;
     private LocalDateTime startTime;
     private CubeSideImage[][] playerBoard;
+    private Cube moveCube;
 }
