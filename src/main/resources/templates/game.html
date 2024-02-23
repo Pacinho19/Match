@@ -3,6 +3,8 @@
 
 <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <title>Match</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -28,6 +30,8 @@
         <script type="text/javascript" th:src="@{/scripts/game.js}"></script>
         <script type="text/javascript" th:src="@{/scripts/core.js}"></script>
 
+        <link rel="stylesheet" href="/styles/cube.css">
+
         <style>
                 @keyframes pulse {
                     0% {
@@ -46,11 +50,24 @@
                     }
                 }
         </style>
+
+        <style>
+                img {
+                  width: 100%;
+                  display: block;
+                }
+
+                .board-row{
+                        height:15vh;
+                 }
+        </style>
 </head>
 
 <body>
         <div th:replace="fragments/topnav :: navbar" />
         <div th:replace="fragments/board :: boardFrag" />
+
+        <script src="/scripts/cube.js"></script>
 </body>
 
 </html>

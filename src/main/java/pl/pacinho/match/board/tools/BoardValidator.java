@@ -12,9 +12,17 @@ import java.util.stream.IntStream;
 public class BoardValidator {
 
     public static boolean isValid(BoardCube[][] board) {
-        if(board.length==0)
+        if (board.length == 0)
             return false;
 
+        boolean firstSideBoardIsValid = validBoard(board);
+        if (!firstSideBoardIsValid)
+            return false;
+
+        return validBoard(BoardCubeTransformation.getOppositeBoard(board));
+    }
+
+    private static boolean validBoard(BoardCube[][] board) {
         for (int i = 0; i < board.length; i++) {
             if (!checkDirectionIsValid(board[i]))
                 return false;

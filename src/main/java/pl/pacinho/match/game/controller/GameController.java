@@ -35,7 +35,7 @@ public class GameController {
             return "redirect:" + GameEndpointsConfig.GAMES + "/" + gameId + "/room";
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
-            return "redirect:/" + HomeEndpointsConfig.HOME;
+            return "redirect:" + HomeEndpointsConfig.HOME;
         }
     }
 

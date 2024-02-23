@@ -2,6 +2,7 @@ package pl.pacinho.match.game.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.pacinho.match.board.model.GameBoard;
 import pl.pacinho.match.game.model.enums.GameStatus;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,8 @@ public class Game {
     private LinkedList<Player> players;
     private Integer actualPlayer;
     private LocalDateTime startTime;
+    @Setter
+    private GameBoard gameBoard;
 
     public Game(String player1) {
         players = new LinkedList<>();

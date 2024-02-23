@@ -1,0 +1,32 @@
+<div style="text-align:center" th:fragment="cubeFrag">
+    <div class="center scene">
+        <div class="cube">
+            <div class="cube__face cube__face--front"> <img src="/data/images/MARSHALL.png" alt="" /></div>
+            <div class="cube__face cube__face--back"> <img src="/data/images/CHASE.png" alt="" /></div>
+            <div class="cube__face cube__face--right"> <img src="/data/images/SKY.png" alt="" /></div>
+            <div class="cube__face cube__face--left"> <img src="/data/images/ROCKY.png" alt="" /></div>
+            <div class="cube__face cube__face--top"> <img src="/data/images/RUBBLE.png" alt="" /></div>
+            <div class="cube__face cube__face--bottom"> <img src="/data/images/EVEREST.png" alt="" /></div>
+        </div>
+    </div>
+    <div class="radio-group">
+        <label>
+            <input type="radio" name="rotate-cube-side" value="front" checked/> front
+        </label>
+        <label>
+            <input type="radio" name="rotate-cube-side" value="right"/> right
+        </label>
+        <label>
+            <input type="radio" name="rotate-cube-side" value="back"/> back
+        </label>
+        <label>
+            <input type="radio" name="rotate-cube-side" value="left"/> left
+        </label>
+        <label>
+            <input type="radio" name="rotate-cube-side" value="top"/> top
+        </label>
+        <label>
+            <input type="radio" name="rotate-cube-side" value="bottom"/> bottom
+        </label>
+    </div>
+</div>

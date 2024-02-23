@@ -3,3 +3,5 @@ match:
     max-active-games: 10
   board:
     size: 5
+  cube:
+    file-path: 'static/data/cubes.txt'

@@ -16,6 +16,8 @@ public class MatchConfiguration {
 
     private Board board;
     private Game game;
+    private Cube cube;
+
 
     public static class Board {
         @Setter
@@ -28,5 +30,12 @@ public class MatchConfiguration {
         @Getter
         @Value("${max-active-games")
         private int maxActiveGames;
+    }
+
+    public static class Cube {
+        @Setter
+        @Getter
+        @Value("${file-path")
+        private String filePath;
     }
 }
