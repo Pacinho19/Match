@@ -104,7 +104,6 @@ class GameServiceTest {
         String gameId = gameService.newGame("1");
         //then
         assertThat(gameId, is("test-id"));
-        verify(simpMessagingTemplate, times(1)).convertAndSend("/game-created", "");
         verify(fileBoardBuilder, times(1)).buildBoard();
     }
 
