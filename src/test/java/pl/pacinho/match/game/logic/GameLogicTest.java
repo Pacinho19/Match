@@ -5,8 +5,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.pacinho.match.board.model.BoardCube;
+import pl.pacinho.match.board.model.GameBoard;
+import pl.pacinho.match.cube.model.Cube;
+import pl.pacinho.match.cube.model.CubeSide;
+import pl.pacinho.match.cube.model.CubeSideImage;
+import pl.pacinho.match.cube.model.CubeSideType;
 import pl.pacinho.match.game.exception.GameNotFoundException;
 import pl.pacinho.match.game.model.dto.GameDto;
+import pl.pacinho.match.game.model.dto.Move;
 import pl.pacinho.match.game.model.entity.Game;
 import pl.pacinho.match.game.model.entity.Player;
 import pl.pacinho.match.game.model.enums.GameStatus;
@@ -196,12 +203,169 @@ class GameLogicTest {
         assertThat(isActivePlayer, is(false));
     }
 
+    @Test
+    void illegalStateExceptionShouldBeThrownWhenPreviousMoveCoordinatesIsEqualToGivenMoveCoordinates() {
+        //given
+        Game game = new Game("1");
+        game.setPreviousMove("0,0");
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        //then
+        assertThrows(IllegalStateException.class, () -> gameLogic.move("test-id", new Move(0, 0, null)));
+    }
+
+    @Test
+    void selectedBoardCellShouldBeNullWhenMoveCubeIsNull() {
+        //given
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWithoutMatch()));
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        gameLogic.move("test-id", new Move(0, 0, null));
+
+        //then
+        assertThat(game.getGameBoard().getBoard()[0][0], nullValue());
+    }
+
+    @Test
+    void selectedBoardCellShouldBeReplacedWithMoveCube() {
+        //given
+        Cube cube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
+
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWithoutMatch()));
+        game.setMoveCube(cube);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        gameLogic.move("test-id", new Move(0, 0, CubeSideType.FRONT));
+
+        //then
+        assertThat(game.getGameBoard().getBoard()[0][0].cube(), is(cube));
+    }
+
+    @Test
+    void moveCubeShouldBeReplacedWithBoardCellWithGivenCoordinates() {
+        //given
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
+
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWithoutMatch()));
+        game.setMoveCube(moveCube);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        Cube cubeBeforeMove = game.getGameBoard().getBoard()[0][0].cube();
+
+        //when
+        gameLogic.move("test-id", new Move(0, 0, CubeSideType.FRONT));
+
+        //then
+        assertThat(game.getMoveCube(), is(cubeBeforeMove));
+    }
+
+    @Test
+    void actualPlayerShouldBeChangedAfterMove() {
+        //given
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWithoutMatch()));
+        game.setMoveCube(moveCube);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        gameLogic.move("test-id", new Move(0, 0, CubeSideType.FRONT));
+
+        //then
+        assertThat(game.getActualPlayer(), equalTo(2));
+    }
+
+    @Test
+    void previousMoveShouldBeUpdatedAfterMove() {
+        //given
+        String previousMoveBeforeMove = "1,0";
+
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWithoutMatch()));
+        game.setMoveCube(moveCube);
+        game.setPreviousMove(previousMoveBeforeMove);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        gameLogic.move("test-id", new Move(0, 0, CubeSideType.FRONT));
+
+        //then
+        assertThat(game.getPreviousMove(), equalTo("0,0"));
+        assertThat(game.getPreviousMove(), not(equalTo(previousMoveBeforeMove)));
+    }
+
+    @Test
+    void gameStatusShouldBeChangedToFinishedAfterMatch() {
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWithoutMatch()));
+        game.setMoveCube(moveCube);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        gameLogic.move("test-id", new Move(0, 0, CubeSideType.FRONT));
+
+        //then
+        assertThat(game.getStatus(), equalTo(GameStatus.FINISHED));
+    }
+
+    @Test
+    void resultMatchObjectShouldHasWinningPropertiesAfterMatch() {
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWithoutMatch()));
+        game.setMoveCube(moveCube);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        gameLogic.move("test-id", new Move(0, 0, CubeSideType.FRONT));
+
+        //then
+        assertThat(game.getMatch(), not(nullValue()));
+        assertThat(game.getMatch().isMatch(), is(true));
+        assertThat(game.getMatch().playerIndex(), equalTo(1));
+        assertThat(game.getMatch().cells(), containsInAnyOrder("0,0", "0,1", "0,2"));
+    }
+
 
     private static GameDto getInProgressGameWithTwoPlayers() {
         return GameDto.builder()
                 .status(GameStatus.IN_PROGRESS)
                 .players(List.of("1", "2"))
                 .build();
+    }
+
+    private static BoardCube[][] getBoardWithoutMatch() {
+        /** Board Side
+         * ZU MA MA
+         * SK RU TR
+         * RO EV RY
+         */
+
+        /** Opposite Board Side
+         * SK RY EV
+         * RO EV MA
+         * RU TR RO
+         */
+
+        return new BoardCube[][]{
+                {new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.ZUMA), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.RYDER))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.EVEREST))), CubeSideType.FRONT)},
+                {new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.SKY), new CubeSide(CubeSideType.BACK, CubeSideImage.ROCKY))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.RUBBLE), new CubeSide(CubeSideType.BACK, CubeSideImage.EVEREST))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.TRACKER), new CubeSide(CubeSideType.BACK, CubeSideImage.MARSHALL))), CubeSideType.FRONT)},
+                {new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.ROCKY), new CubeSide(CubeSideType.BACK, CubeSideImage.RUBBLE))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.EVEREST), new CubeSide(CubeSideType.BACK, CubeSideImage.TRACKER))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.RYDER), new CubeSide(CubeSideType.BACK, CubeSideImage.ROCKY))), CubeSideType.FRONT)}
+        };
     }
 
 
