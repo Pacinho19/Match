@@ -317,7 +317,7 @@ class GameLogicTest {
     }
 
     @Test
-    void resultMatchObjectShouldHasWinningPropertiesAfterMatch() {
+    void resultMatchObjectShouldHaveWinningPropertiesAfterMatch() {
         Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
         Game game = new Game("1");
         game.setGameBoard(new GameBoard(getBoardWithoutMatch()));

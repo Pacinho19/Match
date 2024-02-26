@@ -26,7 +26,7 @@ class CubeParserTest {
     }
 
     @Test
-    void createdCubeShouldHasCorrectSizeOfSides() {
+    void createdCubeShouldHaveCorrectSizeOfSides() {
         //given
 
         //when
@@ -37,7 +37,7 @@ class CubeParserTest {
     }
 
     @Test
-    void createdCubeShouldHasAllTypesOfSides() {
+    void createdCubeShouldHaveAllTypesOfSides() {
         //given
 
         //when
@@ -50,7 +50,7 @@ class CubeParserTest {
     }
 
     @Test
-    void createdCubeShouldHasCorrectCubeSideImages() {
+    void createdCubeShouldHaveCorrectCubeSideImages() {
         //given
 
         //when
