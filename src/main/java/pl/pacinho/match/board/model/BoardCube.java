@@ -6,8 +6,10 @@ import pl.pacinho.match.cube.model.CubeSide;
 import pl.pacinho.match.cube.model.CubeSideImage;
 import pl.pacinho.match.cube.model.CubeSideType;
 
+import java.io.Serializable;
+
 @EqualsAndHashCode
-public class BoardCube {
+public class BoardCube implements Serializable {
 
     private Cube cube;
     private CubeSideType activeSide;

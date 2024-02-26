@@ -1,4 +1,6 @@
 package pl.pacinho.match.cube.model;
 
-public record CubeSide(CubeSideType sideType, CubeSideImage cubeSideImage) {
+import java.io.Serializable;
+
+public record CubeSide(CubeSideType sideType, CubeSideImage cubeSideImage) implements Serializable {
 }

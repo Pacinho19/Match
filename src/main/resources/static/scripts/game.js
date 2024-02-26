@@ -20,8 +20,10 @@ function updateBoard(result) {
 
         initCube3dView();
          var obj = JSON.parse(result.body);
-         cubeMoveAnimation(obj);
-
+         if(obj.message!=null)
+            showErrorMessage(obj);
+         else
+            cubeMoveAnimation(obj);
         }
     }
     xhr.open('GET', "/match/games/" + document.getElementById("gameId").value + "/board/reload", true);
@@ -30,6 +32,9 @@ function updateBoard(result) {
 
 function initCube3dView(){
     var radioGroup = document.querySelector('.radio-group');
+    if(radioGroup==null)
+        return;
+
     changeSide();
     radioGroup.addEventListener( 'change', changeSide );
 }
@@ -37,13 +42,17 @@ function initCube3dView(){
 function cubeMoveAnimation(moveCubeObj){
     if(moveCubeObj==null) return;
 
-    var playerName = document.getElementById('playerName').innerHTML;
-
-//    if(playerName!=moveCubeObj.playerName) return;
+    console.log('cubeMoveAnimation');
+    console.log(moveCubeObj);
 
     var cell = document.getElementById(moveCubeObj.x+"_"+moveCubeObj.y);
     console.log(cell);
     cell.style.animation = 'pulse 2s normal'
+}
+
+function showErrorMessage(obj){
+    if(obj.playerName==document.getElementById("playerName").innerHTML)
+        alert(obj.message);
 }
 
 function move(yValue, xValue){

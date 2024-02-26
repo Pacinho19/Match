@@ -1,7 +1,10 @@
 package pl.pacinho.match.board.tools;
 
+import org.apache.commons.lang3.SerializationUtils;
 import pl.pacinho.match.board.model.BoardCube;
+import pl.pacinho.match.cube.model.Cube;
 import pl.pacinho.match.cube.model.CubeSideImage;
+import pl.pacinho.match.game.model.dto.Move;
 import pl.pacinho.match.game.model.entity.Match;
 
 import java.util.Arrays;
@@ -68,5 +71,16 @@ public class GameBoardMatch {
 
     private static String getPositionString(int col, Integer row) {
         return row + "," + col;
+    }
+
+    public static boolean isMatchAfterPutCubeInEmptySlot(BoardCube[][] board, Cube moveCube, Move moveDto, int actualPlayer) {
+        BoardCube[][] copyOfBoard = BoardCubeArrayTools.copyOf(board);
+        copyOfBoard[moveDto.y()][moveDto.x()] = new BoardCube(moveCube, actualPlayer == 1 ? moveDto.cubeSideType() : moveDto.cubeSideType().getOppositeSide());
+
+        return checkMatch(
+                actualPlayer == 1
+                        ? copyOfBoard
+                        : BoardCubeTransformation.getOppositeBoard(copyOfBoard)
+        ) != null;
     }
 }

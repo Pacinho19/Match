@@ -9,6 +9,7 @@ import pl.pacinho.match.cube.model.Cube;
 import pl.pacinho.match.cube.model.CubeSide;
 import pl.pacinho.match.cube.model.CubeSideImage;
 import pl.pacinho.match.cube.model.CubeSideType;
+import pl.pacinho.match.game.model.dto.Move;
 import pl.pacinho.match.game.model.entity.Match;
 
 import java.util.List;
@@ -79,6 +80,36 @@ class GameBoardMatchTest {
         assertThat(match.isMatch(), is(true));
         assertThat(match.playerIndex(), equalTo(1));
         assertThat(match.cells(), containsInAnyOrder("0,0", "0,1", "0,2"));
+    }
+
+    @Test
+    void isMatchShouldBeTrueWhenPutCubeWithMissingMatchImageOnEmptyCell() {
+        //given
+        BoardCube[][] board = getBoardWithoutMatch();
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL)));
+        Move move = new Move(1, 0, CubeSideType.FRONT);
+        int playerIndex = 1;
+
+        //when
+        boolean matchAfterPutCubeInEmptySlot = GameBoardMatch.isMatchAfterPutCubeInEmptySlot(board, moveCube, move, playerIndex);
+
+        //then
+        assertThat(matchAfterPutCubeInEmptySlot, is(true));
+    }
+
+    @Test
+    void isMatchShouldBeFalseWhenPutCubeWithNonMatchImageOnEmptyCell() {
+        //given
+        BoardCube[][] board = getBoardWithoutMatch();
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.RYDER)));
+        Move move = new Move(1, 0, CubeSideType.FRONT);
+        int playerIndex = 1;
+
+        //when
+        boolean matchAfterPutCubeInEmptySlot = GameBoardMatch.isMatchAfterPutCubeInEmptySlot(board, moveCube, move, playerIndex);
+
+        //then
+        assertThat(matchAfterPutCubeInEmptySlot, is(false));
     }
 
     private static Stream<Arguments> getBoardsWithMatch() {

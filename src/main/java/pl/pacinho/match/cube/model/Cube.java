@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @Getter
 @RequiredArgsConstructor
-public class Cube {
+public class Cube implements Serializable {
 
     private final List<CubeSide> cubeSide;
 

@@ -79,13 +79,18 @@ public class GameLogic {
             throw new IllegalStateException("This cube was previous pushed!");
 
         BoardCube boardCube = game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()];
+        if (boardCube == null && game.getMoveCube() != null) {
+            if (!GameBoardMatch.isMatchAfterPutCubeInEmptySlot(game.getGameBoard().getBoard(), game.getMoveCube(), moveDto, game.getActualPlayer()))
+                throw new IllegalStateException("Cannot put the cube in empty slot! It is possible only when the move will completed match!");
+        }
+
         if (moveDto.cubeSideType() != null) {
             game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()] = new BoardCube(game.getMoveCube(), game.getActualPlayer() == 1 ? moveDto.cubeSideType() : moveDto.cubeSideType().getOppositeSide());
         } else {
             game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()] = null;
         }
 
-        game.setMoveCube(boardCube.cube());
+        game.setMoveCube(boardCube == null ? null : boardCube.cube());
         game.setActualPlayer(GamePlayerTools.getNextPlayer(game.getActualPlayer()));
         game.setPreviousMove(moveDto.x() + "," + moveDto.y());
 

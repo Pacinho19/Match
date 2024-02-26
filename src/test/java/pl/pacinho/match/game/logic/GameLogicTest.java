@@ -334,6 +334,19 @@ class GameLogicTest {
         assertThat(game.getMatch().cells(), containsInAnyOrder("0,0", "0,1", "0,2"));
     }
 
+    @Test
+    void illegalStateExceptionShouldBeThrownWhenPlayerWantsToPutCubeInEmptyCellWhenItNotCompletedMatch(){
+        Cube moveCube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.ROCKY), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY)));
+        Game game = new Game("1");
+        game.setGameBoard(new GameBoard(getBoardWitEmptyCell()));
+        game.setMoveCube(moveCube);
+        given(gameRepository.findById(anyString())).willReturn(Optional.of(game));
+
+        //when
+        //then
+        assertThrows(IllegalStateException.class, () ->   gameLogic.move("test-id", new Move(0, 0, CubeSideType.FRONT)));
+    }
+
 
     private static GameDto getInProgressGameWithTwoPlayers() {
         return GameDto.builder()
@@ -357,6 +370,32 @@ class GameLogicTest {
 
         return new BoardCube[][]{
                 {new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.ZUMA), new CubeSide(CubeSideType.BACK, CubeSideImage.SKY))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.RYDER))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.EVEREST))), CubeSideType.FRONT)},
+                {new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.SKY), new CubeSide(CubeSideType.BACK, CubeSideImage.ROCKY))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.RUBBLE), new CubeSide(CubeSideType.BACK, CubeSideImage.EVEREST))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.TRACKER), new CubeSide(CubeSideType.BACK, CubeSideImage.MARSHALL))), CubeSideType.FRONT)},
+                {new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.ROCKY), new CubeSide(CubeSideType.BACK, CubeSideImage.RUBBLE))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.EVEREST), new CubeSide(CubeSideType.BACK, CubeSideImage.TRACKER))), CubeSideType.FRONT),
+                        new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.RYDER), new CubeSide(CubeSideType.BACK, CubeSideImage.ROCKY))), CubeSideType.FRONT)}
+        };
+    }
+
+    private static BoardCube[][] getBoardWitEmptyCell() {
+        /** Board Side
+         * NULL MA MA
+         * SK RU TR
+         * RO EV RY
+         */
+
+        /** Opposite Board Side
+         * NULL RY EV
+         * RO EV MA
+         * RU TR RO
+         */
+
+        return new BoardCube[][]{
+                {null,
                         new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.RYDER))), CubeSideType.FRONT),
                         new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.MARSHALL), new CubeSide(CubeSideType.BACK, CubeSideImage.EVEREST))), CubeSideType.FRONT)},
                 {new BoardCube(new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.SKY), new CubeSide(CubeSideType.BACK, CubeSideImage.ROCKY))), CubeSideType.FRONT),

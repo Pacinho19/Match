@@ -12,6 +12,7 @@ import pl.pacinho.match.game.config.GameEndpointsConfig;
 import pl.pacinho.match.game.logic.GameLogic;
 import pl.pacinho.match.game.model.dto.GameDto;
 import pl.pacinho.match.game.model.dto.Move;
+import pl.pacinho.match.game.model.dto.MoveError;
 import pl.pacinho.match.game.model.enums.GameStatus;
 import pl.pacinho.match.game.service.GameService;
 import pl.pacinho.match.home.config.HomeEndpointsConfig;
@@ -105,8 +106,12 @@ public class GameController {
     public void move(Authentication authentication,
                      @RequestBody Move moveDto,
                      @PathVariable(value = "gameId") String gameId) {
-        gameLogic.move(gameId, moveDto);
-        simpMessagingTemplate.convertAndSend("/reload-board/" + gameId, moveDto);
+        try {
+            gameLogic.move(gameId, moveDto);
+            simpMessagingTemplate.convertAndSend("/reload-board/" + gameId, moveDto);
+        } catch (Exception e) {
+            simpMessagingTemplate.convertAndSend("/reload-board/" + gameId, new MoveError(e.getMessage(), authentication.getName()));
+        }
     }
 
 
