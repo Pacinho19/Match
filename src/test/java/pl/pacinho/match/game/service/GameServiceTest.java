@@ -60,7 +60,7 @@ class GameServiceTest {
     }
 
     @Test
-    void availableGamesListShouldHasOneItemWhenNotAllGamesHasFinishedStatus() {
+    void availableGamesListShouldHaveOneItemWhenNotAllGamesHasFinishedStatus() {
         //given
         List<Game> games = List.of(new Game("1"));
         given(gameRepository.getGames()).willReturn(games);
