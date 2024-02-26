@@ -9,6 +9,7 @@ import pl.pacinho.match.game.exception.GameNotFoundException;
 import pl.pacinho.match.game.model.dto.GameDto;
 import pl.pacinho.match.game.model.dto.Move;
 import pl.pacinho.match.game.model.entity.Game;
+import pl.pacinho.match.game.model.entity.Match;
 import pl.pacinho.match.game.model.entity.Player;
 import pl.pacinho.match.game.model.enums.GameStatus;
 import pl.pacinho.match.game.repository.GameRepository;
@@ -73,6 +74,9 @@ public class GameLogic {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new GameNotFoundException(gameId));
 
+        if (game.getPreviousMove().equals(moveDto.x() + "," + moveDto.y()))
+            throw new IllegalStateException("This cube was previous pushed!");
+
         BoardCube boardCube = game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()];
         if (moveDto.cubeSideType() != null) {
             game.getGameBoard().getBoard()[moveDto.y()][moveDto.x()] = new BoardCube(game.getMoveCube(), game.getActualPlayer() == 1 ? moveDto.cubeSideType() : moveDto.cubeSideType().getOppositeSide());
@@ -82,15 +86,18 @@ public class GameLogic {
 
         game.setMoveCube(boardCube.cube());
         game.setActualPlayer(getNextPlayer(game.getActualPlayer()));
-        if (isFinishGame(game)){
-            System.out.println("Match!");
-            //TODO Check which player won and create message
-            game.setStatus(GameStatus.FINISHED);
-        }
+        game.setPreviousMove(moveDto.x() + "," + moveDto.y());
+
+        checkFinishGame(game);
     }
 
-    private boolean isFinishGame(Game game) {
-        return GameBoardMatch.isMatch(game.getGameBoard().getBoard());
+    private boolean checkFinishGame(Game game) {
+        Match match = GameBoardMatch.isMatch(game.getGameBoard().getBoard());
+        if (match.isMatch()) {
+            game.setStatus(GameStatus.FINISHED);
+        }
+        game.setMatch(match);
+        return match.isMatch();
     }
 
     private Integer getNextPlayer(Integer actualPlayer) {

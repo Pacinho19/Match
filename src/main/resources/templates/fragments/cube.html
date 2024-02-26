@@ -1,6 +1,6 @@
 <div style="text-align:center" th:fragment="cubeFrag">
-    <h3 th:if="${game.playerIndex==game.actualPlayer && game.moveCube!=null}">Your turn! Spin cube and click cube to replace!</h3>
-    <div class="center scene" th:if="${game.playerIndex==game.actualPlayer && game.moveCube!=null}">
+    <h3 th:if="${game.playerIndex==game.actualPlayer && game.moveCube!=null && game.status.name!='FINISHED'}">Your turn! Spin cube and click cube to replace!</h3>
+    <div class="center scene" th:if="${game.playerIndex==game.actualPlayer && game.moveCube!=null &&  game.status.name!='FINISHED'}">
         <div class="cube" id="cube-div">
             <div th:each="cubeSideEntry : ${game.moveCube.getCubeSideMap()}" class="cube__face"
                  th:classappend="${'cube__face--' + #strings.toLowerCase(cubeSideEntry.key)}"><img
@@ -12,7 +12,7 @@
             <!--            <div class="cube__face cube__face&#45;&#45;bottom"> <img src="/data/images/EVEREST.png" alt="" /></div>-->
         </div>
     </div>
-    <div class="radio-group" id="radio-group" th:style="${game.moveCube!=null ? 'display:block' : 'display:none'}">
+    <div class="radio-group" id="radio-group" th:style="${game.moveCube!=null ? 'display:block' : 'display:none'}"  th:if="${game.playerIndex==game.actualPlayer && game.moveCube!=null &&  game.status.name!='FINISHED'}">
         <label>
             <input type="radio" name="rotate-cube-side" value="front" checked/> front
         </label>
@@ -32,8 +32,8 @@
             <input type="radio" name="rotate-cube-side" value="bottom"/> bottom
         </label>
     </div>
-    <h1 th:if="${game.playerIndex==game.actualPlayer && game.moveCube==null}">Your turn! Click first cube to push!</h1>
-    <h1 th:if="${game.playerIndex!=game.actualPlayer}">Waiting for opponent move!</h1>
+    <h1 th:if="${game.playerIndex==game.actualPlayer && game.moveCube==null &&  game.status.name!='FINISHED'}">Your turn! Click first cube to push!</h1>
+    <h1 th:if="${game.playerIndex!=game.actualPlayer &&  game.status.name!='FINISHED'}">Waiting for opponent move!</h1>
 
     <script src="/scripts/cube.js"></script>
 </div>

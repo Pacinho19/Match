@@ -35,6 +35,7 @@ public class GameController {
                           RedirectAttributes redirectAttrs) {
         try {
             String gameId = gameService.newGame(authentication.getName());
+            simpMessagingTemplate.convertAndSend("/game-created", "");
             return "redirect:" + GameEndpointsConfig.GAMES + "/" + gameId + "/room";
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
@@ -101,11 +102,11 @@ public class GameController {
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PostMapping(GameEndpointsConfig.GAME_MOVE)
-    public void shot(Authentication authentication,
+    public void move(Authentication authentication,
                      @RequestBody Move moveDto,
                      @PathVariable(value = "gameId") String gameId) {
         gameLogic.move(gameId, moveDto);
-        simpMessagingTemplate.convertAndSend("/reload-board/" + gameId, "");
+        simpMessagingTemplate.convertAndSend("/reload-board/" + gameId, moveDto);
     }
 
 

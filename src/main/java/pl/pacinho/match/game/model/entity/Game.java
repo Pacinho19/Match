@@ -27,6 +27,10 @@ public class Game {
     private GameBoard gameBoard;
     @Setter
     private Cube moveCube;
+    @Setter
+    private String previousMove;
+    @Setter
+    private Match match;
 
     public Game(String player1) {
         players = new LinkedList<>();
@@ -36,6 +40,8 @@ public class Game {
         this.startTime = LocalDateTime.now();
         this.actualPlayer = 1;
         this.gameBoard = new GameBoard(new BoardCube[][]{});
+        this.previousMove = "";
+        this.match = Match.emptyMatch();
     }
 
 }

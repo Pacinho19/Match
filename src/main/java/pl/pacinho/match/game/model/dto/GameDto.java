@@ -24,4 +24,7 @@ public class GameDto {
     private CubeSideImage[][] playerBoard;
     private Cube moveCube;
     private List<CubeSideImage> bonusImages;
+    private String previousMove;
+    private MatchDto match;
+    private CubeSideImage[][] oppositePlayerBoard;
 }

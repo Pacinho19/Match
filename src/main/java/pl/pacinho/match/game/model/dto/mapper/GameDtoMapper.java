@@ -5,17 +5,21 @@ import pl.pacinho.match.board.model.GameBoard;
 import pl.pacinho.match.board.tools.BoardCubeTransformation;
 import pl.pacinho.match.cube.model.CubeSideImage;
 import pl.pacinho.match.game.model.dto.GameDto;
+import pl.pacinho.match.game.model.dto.MatchDto;
+import pl.pacinho.match.game.model.dto.PlayerDto;
 import pl.pacinho.match.game.model.entity.Game;
+import pl.pacinho.match.game.model.entity.Match;
 import pl.pacinho.match.game.model.entity.Player;
+import pl.pacinho.match.game.tools.GamePlayerTools;
 
 import java.util.*;
 
 public class GameDtoMapper {
     public static GameDto parse(Game game, String name) {
-        Integer playerIndex = getPlayerIndex(game.getPlayers(), name);
+        Integer playerIndex = GamePlayerTools.getPlayerIndex(game.getPlayers(), name);
         return GameDto.builder()
                 .id(game.getId())
-                .players(getPlayersNames(game))
+                .players(GamePlayerTools.getPlayersNames(game.getPlayers()))
                 .playerIndex(playerIndex)
                 .status(game.getStatus())
                 .actualPlayer(game.getActualPlayer())
@@ -23,13 +27,26 @@ public class GameDtoMapper {
                 .playerBoard(getPlayersBoard(game.getGameBoard(), playerIndex))
                 .moveCube(Objects.equals(playerIndex, game.getActualPlayer()) ? game.getMoveCube() : null)
                 .bonusImages(getBonusImagesForPlayer(game.getPlayers(), playerIndex))
+                .previousMove(game.getPreviousMove())
+                .match(getMatch(game.getPlayers(), game.getMatch()))
+                .oppositePlayerBoard(game.getMatch().isMatch() ? getPlayersBoard(game.getGameBoard(), GamePlayerTools.getOppositePlayerIndex(game.getPlayers(), playerIndex)) : null)
                 .build();
     }
 
+    private static MatchDto getMatch(LinkedList<Player> players, Match match) {
+        PlayerDto playerDto = GamePlayerTools.getPlayerByIndex(players, match.playerIndex())
+                .map(player -> new PlayerDto(player.getIndex(), player.getName()))
+                .orElse(null);
+
+        return new MatchDto(
+                match.isMatch(),
+                match.cells(),
+                playerDto
+        );
+    }
+
     private static List<CubeSideImage> getBonusImagesForPlayer(LinkedList<Player> players, Integer playerIndex) {
-        return players.stream()
-                .filter(p -> Objects.equals(playerIndex, p.getIndex()))
-                .findFirst()
+        return GamePlayerTools.getPlayerByIndex(players, playerIndex)
                 .map(Player::getBonusImages)
                 .orElse(Collections.emptyList());
     }
@@ -50,20 +67,4 @@ public class GameDtoMapper {
                 .toArray(CubeSideImage[]::new);
     }
 
-    private static List<String> getPlayersNames(Game game) {
-        return game.getPlayers()
-                .stream()
-                .map(Player::getName)
-                .toList();
-    }
-
-    private static Integer getPlayerIndex(LinkedList<Player> players, String name) {
-        Optional<Player> playerOpt = players.stream()
-                .filter(p -> p.getName().equals(name))
-                .findFirst();
-
-        if (playerOpt.isEmpty()) return null;
-        return playerOpt.get()
-                .getIndex();
-    }
 }

@@ -18,20 +18,25 @@
         <div class="col-md-5" style="text-align:center;height:100%;width:100%;">
 
             <table class="row justify-content-end" style="margin-top:1%">
-                <tr th:each="row,iter : ${game.playerBoard}" class="d-flex bd-highlight board-row">
-                    <td th:each="col,iter2 : ${row}" class="col-md-2" style="border-style: solid;">
-                        <a href="#" th:if="${game.actualPlayer==game.playerIndex && col!=null && game.status.name=='IN_PROGRESS'}"
+                <tr th:each="row,iter : ${game.match.isMatch && game.match.player.index!=game.playerIndex ? game.oppositePlayerBoard : game.playerBoard}" class="d-flex bd-highlight board-row">
+                    <td th:each="col,iter2 : ${row}" class="col-md-2" style="border-style: solid;border-width: 4px;"
+                        th:styleappend="${game.match.isMatch && #lists.contains(game.match.cells, (iter.index+','+iter2.index)) ? ';border-color:green' : (game.previousMove==(iter2.index+','+iter.index) ? ';border-color:red' : '')}"
+                        th:id="${iter2.index+'_'+iter.index}" >
+                        <a href="#" th:if="${game.actualPlayer==game.playerIndex
+                                        && col!=null
+                                        && game.status.name=='IN_PROGRESS' && game.previousMove!=(iter2.index+','+iter.index)}"
                            style="width:100%;height:100%" th:onclick="|move(${iter.index},${iter2.index})|">
                             <img th:src="${'/data/images/' + col + '.png'}" style="display:block;" width="100%" height="100%">
                         </a>
-                        <img th:if="${(game.actualPlayer!=game.playerIndex || game.status.name=='FINISHED') && col!=null}" th:src="${'/data/images/' + col + '.png'}" style="display:block;" width="100%" height="100%">
+                        <img th:if="${(game.actualPlayer!=game.playerIndex || game.status.name=='FINISHED' || game.previousMove==(iter2.index+','+iter.index)) && col!=null}" th:src="${'/data/images/' + col + '.png'}" style="display:block;" width="100%" height="100%">
                     </td>
                 </tr>
             </table>
 
         </div>
         <div class="col-md-3 d-flex align-content-around" style="text-align:center;height:100%;width:100%;">
-            <div th:replace="fragments/cube :: cubeFrag" />
+            <div th:if="${game.status.nam=='IN_PROGRESS'}" th:replace="fragments/cube :: cubeFrag" />
+            <h1 th:if="${game.status.name=='FINISHED'}" th:text="${'Game over! Player ' + game.match.player.name + ' won the game!'}"></h1>
         </div>
         <div class="col-md-1" style="text-align:center">
         </div>

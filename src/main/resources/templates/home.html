@@ -23,7 +23,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
     <script>
-           function updateAvailableGames() {
+        function updateAvailableGames() {
             $.post("/match/games").done(function (fragment) {
                 $("#availableGames").replaceWith(fragment);
             });

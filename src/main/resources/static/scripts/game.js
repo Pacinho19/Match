@@ -19,8 +19,9 @@ function updateBoard(result) {
             $("#board").replaceWith(xhr.responseText);
 
         initCube3dView();
-//             var obj = JSON.parse(result.body);
-//            cubeMoveAnimation(obj.cubeMoveInfo);
+         var obj = JSON.parse(result.body);
+         cubeMoveAnimation(obj);
+
         }
     }
     xhr.open('GET', "/match/games/" + document.getElementById("gameId").value + "/board/reload", true);
@@ -38,9 +39,10 @@ function cubeMoveAnimation(moveCubeObj){
 
     var playerName = document.getElementById('playerName').innerHTML;
 
-    if(playerName!=moveCubeObj.playerName) return;
+//    if(playerName!=moveCubeObj.playerName) return;
 
-    var cell = document.getElementById(moveCubeObj.cubeDto.x+"_"+moveCubeObj.cubeDto.y);
+    var cell = document.getElementById(moveCubeObj.x+"_"+moveCubeObj.y);
+    console.log(cell);
     cell.style.animation = 'pulse 2s normal'
 }
 
