@@ -13,6 +13,7 @@ import pl.pacinho.match.game.model.entity.Match;
 import pl.pacinho.match.game.model.entity.Player;
 import pl.pacinho.match.game.model.enums.GameStatus;
 import pl.pacinho.match.game.repository.GameRepository;
+import pl.pacinho.match.game.tools.GamePlayerTools;
 import pl.pacinho.match.utils.RandomUtils;
 
 import java.lang.reflect.Array;
@@ -85,7 +86,7 @@ public class GameLogic {
         }
 
         game.setMoveCube(boardCube.cube());
-        game.setActualPlayer(getNextPlayer(game.getActualPlayer()));
+        game.setActualPlayer(GamePlayerTools.getNextPlayer(game.getActualPlayer()));
         game.setPreviousMove(moveDto.x() + "," + moveDto.y());
 
         checkFinishGame(game);
@@ -100,9 +101,6 @@ public class GameLogic {
         return match.isMatch();
     }
 
-    private Integer getNextPlayer(Integer actualPlayer) {
-        return actualPlayer == 1 ? 2 : 1;
-    }
 
     private void setBonusImages(LinkedList<Player> players) {
         List<CubeSideImage> images = new ArrayList<>(Arrays.asList(CubeSideImage.values()));

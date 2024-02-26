@@ -137,6 +137,30 @@ class GamePlayerToolsTest {
         assertThat(oppositePlayerIndex, equalTo(2));
     }
 
+    @Test
+    void nextPlayerIndexShouldBeEqual2WhenGivenPlayerIndexEqualTo1(){
+        //given
+        int actualPlayerIndex = 1;
+
+        //when
+        Integer nextPlayer = GamePlayerTools.getNextPlayer(actualPlayerIndex);
+
+        assertThat(nextPlayer, not(equalTo(actualPlayerIndex)));
+        assertThat(nextPlayer, equalTo(2));
+    }
+
+    @Test
+    void nextPlayerIndexShouldBeEqual1WhenGivenPlayerIndexEqualTo2(){
+        //given
+        int actualPlayerIndex = 2;
+
+        //when
+        Integer nextPlayer = GamePlayerTools.getNextPlayer(actualPlayerIndex);
+
+        assertThat(nextPlayer, not(equalTo(actualPlayerIndex)));
+        assertThat(nextPlayer, equalTo(1));
+    }
+
     private static List<Player> getTwoPlayersList() {
         Player player = new Player("1", 1);
         Player player2 = new Player("2", 2);

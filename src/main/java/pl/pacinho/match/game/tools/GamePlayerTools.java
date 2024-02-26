@@ -38,4 +38,8 @@ public class GamePlayerTools {
                 .map(Player::getIndex)
                 .orElseThrow(() -> new IllegalStateException("Opposite player with given player index" + index + " not found!"));
     }
+
+    public static Integer getNextPlayer(Integer actualPlayer) {
+        return actualPlayer == 1 ? 2 : 1;
+    }
 }
