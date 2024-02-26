@@ -9,6 +9,7 @@ import pl.pacinho.match.cube.model.CubeSideType;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -58,6 +59,19 @@ class BoardCubeTest {
 
         //then
         assertThat(activeCubeSideImage, is(CubeSideImage.ROCKY));
+    }
+
+    @Test
+    void boardCubeSideImageNameShouldBeReturnedFromToStringSimple() {
+        //given
+        Cube cube = new Cube(List.of(new CubeSide(CubeSideType.FRONT, CubeSideImage.EVEREST), new CubeSide(CubeSideType.BACK, CubeSideImage.ROCKY)));
+        BoardCube boardCube = new BoardCube(cube, CubeSideType.FRONT);
+
+        //when
+        String stringSimple = boardCube.toStringSimple();
+
+        //then
+        assertThat(stringSimple, equalTo(CubeSideImage.EVEREST.name()));
     }
 
 }
